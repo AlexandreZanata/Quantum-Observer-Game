@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="description"
+        content="Quantum Observer — A disruptive browser game featuring PQC, entropy manipulation, and quantum weapons.">
+    <title>Quantum Observer — PQC Game</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=JetBrains+Mono:wght@300;400;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+    <canvas id="gameCanvas"></canvas>
+
+    <div id="start-screen">
+        <div class="start-content">
+            <div class="start-logo">
+                <div class="logo-orb">◈</div>
+                <h1 data-i18n="title">QUANTUM OBSERVER</h1>
+                <div class="logo-line"></div>
+                <p class="start-subtitle" data-i18n="subtitle">Post-Quantum Cryptography Game</p>
+            </div>
+            <div class="start-features">
+                <div class="feature"><span class="feature-icon">🔐</span><span data-i18n="feature1">Lattice
+                        Encryption</span></div>
+                <div class="feature"><span class="feature-icon">⚛</span><span data-i18n="feature2">Entropy
+                        Control</span></div>
+                <div class="feature"><span class="feature-icon">🛡</span><span data-i18n="feature3">Quantum
+                        Signatures</span></div>
+                <div class="feature"><span class="feature-icon">⚔</span><span data-i18n="feature4">Quantum
+                        Weapons</span></div>
+                <div class="feature"><span class="feature-icon">🔗</span><span data-i18n="feature5">Blockchain
+                        Signatures</span></div>
+            </div>
+            <div class="name-section">
+                <label class="name-label" data-i18n="enterName">Enter your name, Observer:</label>
+                <input type="text" id="player-name" class="name-input" maxlength="20"
+                    data-i18n-placeholder="namePlaceholder" placeholder="Observer name...">
+            </div>
+            <button id="start-btn" class="start-button" data-i18n="startGame">▶ COLLAPSE WAVEFUNCTION</button>
+            <div class="start-controls">
+                <div class="control-item"><kbd>W A S D</kbd> <span>/</span> <kbd>↑ ↓ ← →</kbd> <span <div
+                        class="control-item"><kbd>CLICK</kbd> <span data-i18n="controls2">Throw · R Orbit</span></div>
+            </div>
+            <div class="options-row">
+                <div class="option-group">
+                    <span class="option-label" data-i18n="langLabel">LANGUAGE</span>
+                    <select id="lang-select" class="option-select">
+                        <option value="en">🇬🇧 English</option>
+                        <option value="pt">🇧🇷 Português</option>
+                        <option value="es">🇪🇸 Español</option>
+                    </select>
+                </div>
+                <div class="option-group">
+                    <span class="option-label" data-i18n="modeLabel">MODE</span>
+                    <select id="mode-select" class="option-select">
+                        <option value="quantum" data-i18n="modeQuantum">Quantum</option>
+                        <option value="seed" data-i18n="modeSeed">Random Seed</option>
+                        <option value="hardcore" data-i18n="modeHardcore">Hardcore</option>
+                        <option value="nightmare" data-i18n="modeNightmare">Nightmare</option>
+                        <option value="abyss" data-i18n="modeAbyss">Quantum Abyss</option>
+                    </select>
+                </div>
+                <div class="option-group">
+                    <span class="option-label" data-i18n="bgOption">BACKGROUND</span>
+                    <select id="bg-select" class="option-select">
+                        <option value="lattice" data-i18n="bgLattice">Lattice</option>
+                        <option value="quantum" data-i18n="bgQuantum">Quantum RGB</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="enemy-hashes-container" class="side-panel" style="display: none; left: 16px;">
+        <div class="panel-title" data-i18n="enemyHashes">QUANTUM ENTITIES</div>
+        <div id="enemy-hashes-list"></div>
+    </div>
+
+    <div id="quantum-luck-container" class="side-panel" style="display: none; right: 16px;">
+        <div class="panel-title" data-i18n="quantumLuck">QUANTUM LUCK</div>
+        <div id="quantum-luck-value" class="luck-value">50.0%</div>
+        <div class="luck-details">
+            <span id="luck-drops">0</span> <span data-i18n="dropCalc">Drops</span>
+            <br /><span id="luck-alive">0</span> <span data-i18n="enemiesAlive">Enemies Alive</span>
+        </div>
+        <div
+            style="width: 100%; max-width: 100%; overflow: hidden; border-radius: 4px; border: 1px solid rgba(0,255,204,0.1); margin-top: 8px;">
+            <canvas id="luck-graph" width="180" height="40"
+                style="display: block; width: 100%; background: rgba(0,0,0,0.5);"></canvas>
+        </div>
+    </div>
+
+    <div id="hud-panel" style="display: none;">
+        <div class="hud-item"><span class="hud-label" data-i18n="qubits">QUBITS</span><span id="hud-qubits"
+                class="hud-value qubits">◆◆◆◆◆</span></div>
+        <div class="hud-divider"></div>
+        <div class="hud-item"><span class="hud-label" data-i18n="gold">GOLD</span><span id="hud-gold"
+                class="hud-value gold">0</span></div>
+        <div class="hud-divider"></div>
+        <div class="hud-item"><span class="hud-label" data-i18n="weapon">WEAPONS</span>
+            <div id="hud-weapon-list" class="hud-weapon-list"></div>
+        </div>
+        <div class="hud-divider"></div>
+        <div class="hud-item"><span class="hud-label" data-i18n="entropy">ENTROPY</span><span id="hud-entropy"
+                class="hud-value entropy">50%</span></div>
+        <div class="hud-divider"></div>
+        <div class="hud-item"><span class="hud-label" data-i18n="chain">CHAIN</span><span id="hud-chain"
+                class="hud-value chain">0</span></div>
+        <div class="hud-divider"></div>
+        <div class="hud-item"><span class="hud-label" data-i18n="highScore">HIGH SCORE</span><span id="hud-highscore"
+                class="hud-value highscore">0</span></div>
+    </div>
+
+    <div id="entropy-panel" style="display: none;">
+        <div class="entropy-header"><span class="entropy-icon">◈</span><span data-i18n="entropyControl">ENTROPY
+                CONTROL</span></div>
+        <div class="entropy-slider-container">
+            <input type="range" id="entropy-slider" min="0" max="100" value="50" class="entropy-slider">
+            <div class="entropy-labels"><span data-i18n="predictable">PREDICTABLE</span><span
+                    id="entropy-value">50%</span><span data-i18n="chaotic">CHAOTIC</span></div>
+        </div>
+        <div class="entropy-hash">
+            <span class="hash-label" data-i18n="signatureHash">SIGNATURE HASH</span>
+            <span id="hud-hash" class="hash-value">genesis</span>
+        </div>
+    </div>
+
+    <div id="terminal-panel" style="display: none;">
+        <div class="terminal-header">
+            <span class="terminal-dot red"></span><span class="terminal-dot yellow"></span><span
+                class="terminal-dot green"></span>
+            <span class="terminal-title" data-i18n="terminalTitle">QUANTUM TERMINAL</span>
+        </div>
+        <div id="terminal-content" class="terminal-content"></div>
+    </div>
+
+    <div id="gameover-screen" style="display: none;">
+        <div class="gameover-content">
+            <h2 class="gameover-title" data-i18n="gameOverTitle">WAVEFUNCTION COLLAPSED</h2>
+            <p class="gameover-subtitle"><span id="gameover-player">Observer</span> — <span data-i18n="gameOverSub">The
+                    observer mechanism has failed.</span></p>
+            <div class="gameover-stats">
+                <div class="stat-row"><span class="stat-name" data-i18n="finalGold">GOLD COLLECTED</span><span
+                        id="final-gold" class="stat-val">0</span></div>
+                <div class="stat-row"><span class="stat-name" data-i18n="bestScore">BEST SCORE</span><span
+                        id="best-score" class="stat-val">0</span></div>
+                <div class="stat-row"><span class="stat-name" data-i18n="sigChain">SIGNATURE CHAIN</span><span
+                        id="chain-length" class="stat-val">0</span></div>
+                <div class="stat-row"><span class="stat-name" data-i18n="chainIntegrity">CHAIN INTEGRITY</span><span
+                        id="chain-valid" class="stat-val">—</span></div>
+                <div class="stat-row encrypted-row"><span class="stat-name" data-i18n="encryptedScore">ENCRYPTED
+                        SCORE</span><span id="encrypted-score" class="stat-val encrypted">0x0000</span></div>
+            </div>
+            <div class="ranking-section">
+                <h3 class="ranking-title" data-i18n="ranking">RANKING</h3>
+                <div id="ranking-list" class="ranking-list"></div>
+            </div>
+            <p class="gameover-restart pulse-text" data-i18n="pressRestart">Press any key to restart</p>
+        </div>
+    </div>
+
+    <div id="pause-screen"
+        style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(0,0,0,0.7); backdrop-filter:blur(10px); z-index:9999; flex-direction:column; align-items:center; justify-content:center;">
+        <h1 style="font-size: 80px; color:#ff003c; text-shadow:0 0 30px #ff003c; letter-spacing: 25px; margin: 0;">
+            PAUSED</h1>
+        <p style="color:#00ffcc; font-size: 20px; font-family:'JetBrains Mono',monospace;">Wavefunction frozen across
+            all dimensions.</p>
+    </div>
+
+    <script src="main.js" type="module"></script>
+</body>
+
+</html>
