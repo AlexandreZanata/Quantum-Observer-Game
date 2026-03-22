@@ -27,3 +27,6 @@ As an Observer, you must navigate a collapsing universe where your very gaze def
 * Glassmorphism & Cyberpunk Neon UI
 
 *Remember: In the quantum realm, God doesn't play dice—He just uses a really strong cryptographic hash pseudo-randomizer.*
+
+<img width="1863" height="918" alt="image" src="https://github.com/user-attachments/assets/36d48cce-ee16-4af8-8c0c-50379b044b52" />
+
