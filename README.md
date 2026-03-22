@@ -14,6 +14,9 @@ As an Observer, you must navigate a collapsing universe where your very gaze def
 * **Random Seed Mode:** Try locking the universe down to a single Random Seed hash! Enemies, gold, and your fate will be entirely deterministic based on that one master key. 
 
 ## 🚀 How to Play
+
+link: https://quantum-observer-game.vercel.app/
+
 1. Simply open `index.html` in your favorite modern browser. You can even host it via a local server (`npx serve` or any HTTP server).
 2. Use **WASD** to walk the grid.
 3. Use the **Mouse** to look around and throw weapons (Click!).
